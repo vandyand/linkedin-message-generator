@@ -1,6 +1,77 @@
 # LinkedIn Cold Message Generator
 
-A premium AI-powered tool that helps sales professionals, recruiters, and job seekers create personalized, high-converting LinkedIn outreach messages.
+A powerful tool for generating personalized, effective cold messages for LinkedIn outreach.
+
+## Features
+
+- Generate customized messages for different scenarios (sales, recruiting, job seeking, networking)
+- Save time with AI-powered message templates
+- Increase response rates with personalized outreach
+- Track message performance and success metrics
+- Premium templates for subscribers
+
+## Live Demo
+
+Visit the live demo at [https://vandyand.github.io/linkedin-message-generator/](https://vandyand.github.io/linkedin-message-generator/)
+
+## Installation
+
+To run this project locally:
+
+1. Clone the repository
+
+   ```
+   git clone https://github.com/vandyand/linkedin-message-generator.git
+   cd linkedin-message-generator
+   ```
+
+2. Install dependencies
+
+   ```
+   npm install
+   ```
+
+3. Start the development server
+
+   ```
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:3000`
+
+## Usage
+
+1. Select your outreach scenario (sales, recruiting, job seeking, networking)
+2. Fill in the required fields about your prospect
+3. Click "Generate Message" to create a personalized message
+4. Copy the generated message to your clipboard
+5. Paste into LinkedIn and send!
+
+## Development
+
+This project uses vanilla JavaScript, HTML, and CSS. The structure is as follows:
+
+- `index.html` - Main HTML file
+- `css/styles.css` - Styling
+- `js/script.js` - Core functionality
+- `assets/` - Images and other static assets
+
+## Business Model
+
+This project follows a freemium model:
+
+- Free tier: Limited message generations per day
+- Premium subscription: Unlimited messages, advanced templates, performance tracking
+
+For more details on monetization strategy, see [MONETIZATION.md](./MONETIZATION.md).
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Value Proposition
 
