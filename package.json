@@ -1,0 +1,31 @@
+{
+  "name": "linkedin-message-generator",
+  "version": "1.0.0",
+  "description": "A tool for generating personalized LinkedIn cold messages",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vandyand/linkedin-message-generator.git"
+  },
+  "keywords": [
+    "linkedin",
+    "message",
+    "generator",
+    "cold",
+    "outreach"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vandyand/linkedin-message-generator/issues"
+  },
+  "homepage": "https://github.com/vandyand/linkedin-message-generator#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+} 
