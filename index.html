@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedInspire | AI-Powered LinkedIn Message Generator</title>
+    <meta
+      name="description"
+      content="Create personalized, high-converting LinkedIn outreach messages with AI. Get 40% higher response rates with our psychology-based templates."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <span>Linked</span><span class="accent">Inspire</span>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#" class="login-button">Log In</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1>
+              Create LinkedIn Messages That Get
+              <span class="accent">3x More Responses</span>
+            </h1>
+            <p class="subtitle">
+              Our AI-powered message generator creates personalized outreach
+              that stands out in a crowded inbox.
+            </p>
+            <a href="#generator" class="cta-button">Try It Free</a>
+            <p class="trial-note">
+              No credit card required for 3 free messages
+            </p>
+          </div>
+          <div class="hero-image">
+            <img
+              src="assets/hero-image.png"
+              alt="LinkedIn Message Generator Dashboard"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="generator" class="generator-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Generate Your <span class="accent">Perfect Outreach</span></h2>
+            <p>
+              Fill out the form below and our AI will create a personalized
+              message optimized for responses
+            </p>
+          </div>
+
+          <div class="message-generator">
+            <form id="message-form">
+              <div class="form-grid">
+                <div class="form-section">
+                  <h3>About You</h3>
+                  <div class="input-group">
+                    <label for="sender-name">Your Name</label>
+                    <input type="text" id="sender-name" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="sender-title">Your Job Title</label>
+                    <input type="text" id="sender-title" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="sender-company">Your Company</label>
+                    <input type="text" id="sender-company" required />
+                  </div>
+                </div>
+
+                <div class="form-section">
+                  <h3>About Recipient</h3>
+                  <div class="input-group">
+                    <label for="recipient-name">Recipient's Name</label>
+                    <input type="text" id="recipient-name" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="recipient-title">Recipient's Job Title</label>
+                    <input type="text" id="recipient-title" required />
+                  </div>
+                  <div class="input-group">
+                    <label for="recipient-company">Recipient's Company</label>
+                    <input type="text" id="recipient-company" required />
+                  </div>
+                </div>
+
+                <div class="form-section full-width">
+                  <h3>Message Details</h3>
+                  <div class="input-group">
+                    <label for="message-type">Message Purpose</label>
+                    <select id="message-type" required>
+                      <option value="">Select a purpose</option>
+                      <option value="sales">Sales Outreach</option>
+                      <option value="recruiting">Recruiting Outreach</option>
+                      <option value="job-seeking">Job Application</option>
+                      <option value="networking">General Networking</option>
+                    </select>
+                  </div>
+                  <div class="input-group">
+                    <label for="personalization"
+                      >Personal Notes (optional)</label
+                    >
+                    <textarea
+                      id="personalization"
+                      placeholder="Mention any connections, mutual interests, or specific points you'd like to include"
+                    ></textarea>
+                  </div>
+                  <div class="input-group">
+                    <label for="tone">Message Tone</label>
+                    <select id="message-tone" required>
+                      <option value="professional">Professional</option>
+                      <option value="casual">Casual & Friendly</option>
+                      <option value="direct">Direct & Brief</option>
+                      <option value="enthusiastic">Enthusiastic</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-footer">
+                <button type="submit" id="generate-button" class="cta-button">
+                  Generate Message
+                </button>
+                <p class="messages-remaining" id="messages-remaining">
+                  3 free messages remaining
+                </p>
+              </div>
+            </form>
+
+            <div
+              class="results-container"
+              id="results-container"
+              style="display: none"
+            >
+              <div class="results-header">
+                <h3>Your Generated Message</h3>
+                <div class="result-actions">
+                  <button id="copy-message" class="action-button">Copy</button>
+                  <button id="regenerate-message" class="action-button">
+                    Regenerate
+                  </button>
+                </div>
+              </div>
+              <div class="message-result" id="message-result">
+                <!-- Generated message will appear here -->
+              </div>
+              <div class="usage-tips">
+                <h4>Pro Tips:</h4>
+                <ul>
+                  <li>Personalize the message further before sending</li>
+                  <li>Follow up after 3-5 days if no response</li>
+                  <li>Best time to send: Tuesday-Thursday, 8-10am</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Why LinkedInspire Works</h2>
+            <p>
+              Our messages are based on proven psychological principles that
+              drive responses
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3>Data-Backed Templates</h3>
+              <p>
+                Our templates are based on analyzing 10,000+ successful LinkedIn
+                conversations
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <h3>Psychology-Based</h3>
+              <p>
+                Messages use proven principles like reciprocity, curiosity, and
+                social proof
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🤖</div>
+              <h3>AI Personalization</h3>
+              <p>
+                Our AI customizes every message for your specific recipient and
+                situation
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📈</div>
+              <h3>A/B Testing</h3>
+              <p>
+                Get multiple variations to test which messaging approach works
+                best
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="pricing-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>
+              Start with 3 free messages, then choose the plan that works for
+              you
+            </p>
+          </div>
+
+          <div class="pricing-options">
+            <div class="pricing-card">
+              <div class="pricing-header">
+                <h3>Monthly</h3>
+                <div class="price">$7.99<span>/month</span></div>
+              </div>
+              <ul class="pricing-features">
+                <li>Unlimited message generation</li>
+                <li>Save & organize templates</li>
+                <li>Response rate tracking</li>
+                <li>Email & chat support</li>
+              </ul>
+              <button class="pricing-button" id="monthly-plan-button">
+                Start Monthly Plan
+              </button>
+            </div>
+
+            <div class="pricing-card featured">
+              <div class="pricing-badge">Best Value</div>
+              <div class="pricing-header">
+                <h3>Annual</h3>
+                <div class="price">$79<span>/year</span></div>
+                <div class="savings">Save $16.88</div>
+              </div>
+              <ul class="pricing-features">
+                <li>Unlimited message generation</li>
+                <li>Save & organize templates</li>
+                <li>Response rate tracking</li>
+                <li>Priority support</li>
+                <li>Advanced analytics dashboard</li>
+              </ul>
+              <button class="pricing-button" id="annual-plan-button">
+                Start Annual Plan
+              </button>
+            </div>
+          </div>
+
+          <div class="guarantee">
+            <p>🔒 30-day money-back guarantee if you're not satisfied</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonials" class="testimonials-section">
+        <div class="container">
+          <div class="section-header">
+            <h2>What Our Users Say</h2>
+            <p>
+              Join thousands of professionals who've improved their outreach
+            </p>
+          </div>
+
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "I used to spend hours crafting messages that got ignored.
+                  With LinkedInspire, my response rate jumped from 12% to over
+                  40% overnight."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img src="assets/testimonial-1.jpg" alt="Sarah T." />
+                <div>
+                  <h4>Sarah T.</h4>
+                  <p>Sales Manager at TechCorp</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "As a recruiter, personalization at scale was my biggest
+                  challenge. This tool has become my secret weapon for
+                  connecting with top candidates."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img src="assets/testimonial-2.jpg" alt="Marcus J." />
+                <div>
+                  <h4>Marcus J.</h4>
+                  <p>Senior Recruiter at RecruitPro</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                <p>
+                  "I was skeptical about AI-written messages, but these
+                  templates feel authentic and have helped me land interviews at
+                  companies I thought were out of reach."
+                </p>
+              </div>
+              <div class="testimonial-author">
+                <img src="assets/testimonial-3.jpg" alt="Priya M." />
+                <div>
+                  <h4>Priya M.</h4>
+                  <p>UX Designer & Job Seeker</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="container">
+          <h2>Ready to Transform Your LinkedIn Outreach?</h2>
+          <p>
+            Join thousands of professionals who are getting more responses with
+            LinkedInspire
+          </p>
+          <a href="#generator" class="cta-button"
+            >Generate Your First Message Free</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <div class="logo">
+              <span>Linked</span><span class="accent">Inspire</span>
+            </div>
+            <p>AI-powered LinkedIn messages that get results</p>
+          </div>
+          <div class="footer-links">
+            <div class="footer-column">
+              <h4>Product</h4>
+              <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Resources</h4>
+              <ul>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Contact Us</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h4>Legal</h4>
+              <ul>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2023 LinkedInspire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Subscription Modal -->
+    <div class="modal" id="subscription-modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Subscribe to LinkedInspire</h2>
+        <p>Unlock unlimited message generation and premium features</p>
+        <div id="payment-form-container">
+          <!-- Stripe Elements will be inserted here -->
+          <div id="card-element"></div>
+          <div id="card-errors" role="alert"></div>
+          <button id="submit-payment" class="cta-button">Subscribe Now</button>
+        </div>
+        <div class="modal-footer">
+          <p>🔒 Secure payment via Stripe</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
