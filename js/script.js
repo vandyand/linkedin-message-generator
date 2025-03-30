@@ -10,6 +10,101 @@ const annualPlanButton = document.getElementById("annual-plan-button");
 const subscriptionModal = document.getElementById("subscription-modal");
 const closeModalButton = document.querySelector(".close-modal");
 
+// Industry-specific data for smart template replacements
+const industryData = {
+  // Tech industry
+  tech: {
+    benefits: [
+      "improving user engagement metrics",
+      "optimizing development workflows",
+      "increasing customer retention",
+    ],
+    achievements: [
+      "product launch",
+      "platform expansion",
+      "recent funding round",
+    ],
+    outcomes: [
+      "reduced development time by 40%",
+      "increased user engagement by 35%",
+      "doubled conversion rates",
+    ],
+  },
+  // Finance industry
+  finance: {
+    benefits: [
+      "reducing operational costs",
+      "streamlining compliance processes",
+      "enhancing security protocols",
+    ],
+    achievements: [
+      "regulatory approval",
+      "market expansion",
+      "new service offering",
+    ],
+    outcomes: [
+      "reduced compliance overhead by 50%",
+      "increased transaction security by 80%",
+      "streamlined customer onboarding",
+    ],
+  },
+  // Media & Entertainment
+  media: {
+    benefits: [
+      "boosting audience engagement",
+      "optimizing content monetization",
+      "streamlining content production",
+    ],
+    achievements: [
+      "channel milestone",
+      "content partnership",
+      "audience growth",
+    ],
+    outcomes: [
+      "increased watch time by 45%",
+      "grew subscriber base by 30%",
+      "improved content ROI by 60%",
+    ],
+  },
+  // Default for any industry
+  default: {
+    benefits: [
+      "improving operational efficiency",
+      "boosting revenue growth",
+      "enhancing customer satisfaction",
+    ],
+    achievements: [
+      "recent company milestone",
+      "market expansion",
+      "new product/service launch",
+    ],
+    outcomes: [
+      "improved key metrics by 30%",
+      "reduced costs by 25%",
+      "increased customer satisfaction scores",
+    ],
+  },
+};
+
+// Career levels for contextual personalization
+const careerLevels = {
+  entry: ["Intern", "Assistant", "Associate", "Junior"],
+  mid: ["Manager", "Lead", "Senior", "Specialist"],
+  executive: [
+    "Director",
+    "VP",
+    "Chief",
+    "Head",
+    "President",
+    "CEO",
+    "CTO",
+    "CIO",
+    "CFO",
+    "Owner",
+    "Founder",
+  ],
+};
+
 // Message Templates
 const messageTemplates = {
   sales: {
@@ -473,51 +568,171 @@ async function generateMessage(formData) {
     .replace(/{{senderName}}/g, formData.senderName)
     .replace(/{{senderTitle}}/g, formData.senderTitle)
     .replace(/{{senderCompany}}/g, formData.senderCompany)
-    .replace(/{{recipientName}}/g, formData.recipientName)
+    .replace(/{{recipientName}}/g, getFirstName(formData.recipientName))
     .replace(/{{recipientRole}}/g, formData.recipientTitle)
     .replace(/{{recipientCompany}}/g, formData.recipientCompany);
 
+  // Process personalization notes
+  let personalizedContent = processPersonalizationNotes(formData);
+
   // Handle personalization
-  if (formData.personalization.trim()) {
-    message = message.replace(/{{personalization}}/g, formData.personalization);
+  if (personalizedContent) {
+    message = message.replace(/{{personalization}}/g, personalizedContent);
   } else {
     // Remove the personalization placeholder if empty
     message = message.replace(/{{personalization}}/g, "");
   }
 
-  // In a real implementation with OpenAI API:
-  /*
-    const response = await fetch('https://api.openai.com/v1/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-                {
-                    role: "system",
-                    content: `You are a professional LinkedIn message writer. Generate a ${tone} tone message for ${messageType} purposes.`
-                },
-                {
-                    role: "user",
-                    content: `Write a LinkedIn message from ${formData.senderName} (${formData.senderTitle} at ${formData.senderCompany}) to ${formData.recipientName} (${formData.recipientTitle} at ${formData.recipientCompany}). Personalization notes: ${formData.personalization}`
-                }
-            ],
-            temperature: 0.7,
-            max_tokens: 300
-        })
-    });
-    
-    const data = await response.json();
-    return data.choices[0].message.content;
-    */
+  // Replace template variables with context-aware content
+  message = replaceTemplateVariables(message, formData);
 
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1500));
 
   return message;
+}
+
+// Helper function to get the first name
+function getFirstName(fullName) {
+  if (!fullName) return "";
+  return fullName.split(" ")[0];
+}
+
+// Process personalization notes to extract useful information
+function processPersonalizationNotes(formData) {
+  const notes = formData.personalization.trim();
+  if (!notes) return "";
+
+  // Process different types of personalization notes
+
+  // Extract mutual connections
+  const mutualConnectionMatch = notes.match(
+    /(?:we both know|mutual connection|we know|connected to) ([^\.!,]+)/i
+  );
+  const mutualConnection = mutualConnectionMatch
+    ? mutualConnectionMatch[1].trim()
+    : null;
+
+  // Extract value propositions
+  const valuePropositionMatch = notes.match(
+    /(?:help|improve|increase|boost|enhance) ([^\.!,]+)/i
+  );
+  const valueProposition = valuePropositionMatch
+    ? valuePropositionMatch[1].trim()
+    : null;
+
+  // Extract payment/results information
+  const paymentModelMatch = notes.match(
+    /(?:only get paid if|paid based on|success fee|performance fee) ([^\.!,]+)/i
+  );
+  const paymentModel = paymentModelMatch ? paymentModelMatch[1].trim() : null;
+
+  // Construct a personalized note from the extracted information
+  let personalizedMessage = "";
+
+  if (mutualConnection) {
+    personalizedMessage += `I noticed we're both connected to ${mutualConnection}, which is why I thought to reach out. `;
+  }
+
+  if (valueProposition) {
+    personalizedMessage += `I specialize in helping professionals like you ${valueProposition}. `;
+  }
+
+  if (paymentModel) {
+    personalizedMessage += `What makes our approach unique is that we ${paymentModel}. `;
+  }
+
+  // If we couldn't extract structured information, clean up the note for direct use
+  if (!personalizedMessage && notes) {
+    // Remove instruction-like language
+    personalizedMessage = notes
+      .replace(/highlight that/gi, "")
+      .replace(/mention that/gi, "")
+      .replace(/make sure to/gi, "")
+      .replace(/we can/gi, "I can")
+      .replace(/we only/gi, "I only")
+      .replace(/we both know/gi, "I noticed we're both connected to");
+  }
+
+  return personalizedMessage.trim();
+}
+
+// Replace template placeholders with context-aware content
+function replaceTemplateVariables(message, formData) {
+  // Determine the most likely industry based on the recipient's company
+  const company = formData.recipientCompany.toLowerCase();
+  let industry = "default";
+
+  // Simple industry detection
+  if (/tech|software|app|digital|cloud|ai|web|app|solution/i.test(company)) {
+    industry = "tech";
+  } else if (
+    /bank|finance|capital|invest|fund|money|wealth|asset/i.test(company)
+  ) {
+    industry = "finance";
+  } else if (
+    /media|entertainment|studio|production|video|youtube|content|channel|creator/i.test(
+      company
+    )
+  ) {
+    industry = "media";
+  }
+
+  // Get appropriate data for the industry
+  const data = industryData[industry];
+
+  // Determine career level based on title
+  const title = formData.recipientTitle;
+  let careerLevel = "mid";
+
+  for (const level in careerLevels) {
+    if (careerLevels[level].some((keyword) => title.includes(keyword))) {
+      careerLevel = level;
+      break;
+    }
+  }
+
+  // Select appropriate benefits, achievements, and outcomes based on career level
+  let benefit, achievement, outcome;
+
+  if (careerLevel === "executive") {
+    // Executives care about strategic benefits
+    benefit = data.benefits[Math.floor(Math.random() * data.benefits.length)];
+    achievement =
+      data.achievements[Math.floor(Math.random() * data.achievements.length)];
+    outcome = data.outcomes[Math.floor(Math.random() * data.outcomes.length)];
+  } else {
+    // Others might care about tactical improvements
+    benefit = data.benefits[Math.floor(Math.random() * data.benefits.length)];
+    achievement =
+      data.achievements[Math.floor(Math.random() * data.achievements.length)];
+    outcome = data.outcomes[Math.floor(Math.random() * data.outcomes.length)];
+  }
+
+  // Special handling for YouTube
+  if (company.includes("youtube")) {
+    benefit = "increasing viewer engagement and monetization";
+    achievement = "channel growth and content strategy";
+    outcome = "increased average watch time and subscriber conversion rate";
+  }
+
+  // Replace the placeholders with context-aware content
+  return message
+    .replace(/\[specific benefit\]/g, benefit)
+    .replace(/\[specific value proposition\]/g, benefit)
+    .replace(/\[achievement\/announcement\]/g, achievement)
+    .replace(/\[specific outcome\]/g, outcome)
+    .replace(/\[achieve specific outcome\]/g, `achieve ${outcome}`)
+    .replace(/\[specific metric improvement\]/g, outcome)
+    .replace(
+      /\[make impact\/grow\]/g,
+      `make a significant impact by ${benefit}`
+    )
+    .replace(/\[key responsibilities\]/g, `optimizing ${benefit} strategies`)
+    .replace(
+      /\[your solution\]/g,
+      `our proven ${industry} optimization process`
+    );
 }
 
 async function regenerateMessage() {
